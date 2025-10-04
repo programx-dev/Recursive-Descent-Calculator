@@ -4,36 +4,9 @@
 вариант: M1
 """
 
-import re
 from typing import cast
 
-
-class ReConst:
-    """
-    Константы, необходымые для разбиения строки на числа, операторы и скобки, используя регульрные выражения
-    """
-
-    NUM = r"\d+(?:\.\d+)?"
-    SIGNED_AT_START = rf"(?<=^)[+\-]?{NUM}"
-    SIGNED_AFTER_OP = rf"(?<=[+\-*/(\s])[+\-]?{NUM}"
-    PLAIN_NUMBER = rf"(?<![\d\)]){NUM}"
-    PATTERN = rf"""
-        \s*
-        (   
-            {SIGNED_AT_START}   | # число с унарным знаком в начале строки
-            {SIGNED_AFTER_OP}   | # число с унарным знаком после опреаторов или '('
-            \*\*                | # степень
-            //                  | # целочисленое деление
-            \*(?!\*)            | # умножение
-            /(?!/)              | #  деление
-            [+\-()%]            | # одиночные токены: + - ( ) %
-            {PLAIN_NUMBER}        # обычное число, стоящее НЕ после какой-то цифры или ')'
-        )
-    """
-    TOKEN_RE = re.compile(PATTERN, re.VERBOSE)
-    ARITHM = ("+", "-", "*", "/", "//", "%", "**")
-    BRACKET = ("(", ")")
-    EXPR = re.compile(r"^[\d\s()+\-*/%.]*$")
+from src.constants import ReConst
 
 
 class CalcError(Exception):
@@ -51,7 +24,7 @@ class Calc:
 
     Token = tuple[str, float | None]
 
-    def __new__(cls, in_: str):
+    def __new__(cls, in_: str) -> float:
         """
         Переопределенный метод __new__.
         Служит как синоним Calc.eval.

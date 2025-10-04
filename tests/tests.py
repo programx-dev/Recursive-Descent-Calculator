@@ -1,5 +1,6 @@
 import unittest
-from calc import Calc, CalcError
+
+from src.calc import Calc, CalcError
 
 
 class TestParse(unittest.TestCase):
