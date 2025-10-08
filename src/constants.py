@@ -27,3 +27,4 @@ class ReConst:
     ARITHM = ("+", "-", "*", "/", "//", "%", "**")
     BRACKET = ("(", ")")
     EXPR = re.compile(r"^[\d\s()+\-*/%.]*$")
+    OP_BRACKET = re.compile(r"\(\s*(?:\*\*|//|[+\-%*/])\s*\)")

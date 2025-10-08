@@ -66,6 +66,21 @@ class TestValidate(unittest.TestCase):
         self.assertFalse(Calc.validate_expr(" 2 ** 3 # 5"))
 
 
+class TestValidateOpBracket(unittest.TestCase):
+    """
+    Тесты, что в выражении нет одиночных операторов в скобках.
+    """
+
+    def test_valid_op_bracket(self):
+        self.assertTrue(Calc.validate_op_bracket(" (7 // 3) + 2 "))
+        self.assertTrue(Calc.validate_op_bracket(" (2+3)*4 + (5) "))
+
+    def test_invalid_op_bracket(self):
+        self.assertFalse(Calc.validate_op_bracket(" 7 (*) 3 + 9 "))
+        self.assertFalse(Calc.validate_op_bracket(" 2 ** 3 (  % ) 6"))
+        self.assertFalse(Calc.validate_op_bracket(" 2 * 3 (  + ) 6"))
+
+
 class TestEval(unittest.TestCase):
     def test_basic_ops(self):
         self.assertEqual(Calc.eval("2+3"), 5)

@@ -88,6 +88,14 @@ class Calc:
         return bool(ReConst.EXPR.match(in_))
 
     @staticmethod
+    def validate_op_bracket(in_: str):
+        """
+        Проверяет, что в выражении нет одиночных операторов в скобках.
+        Например: (+), (**), (%), (//) и т.п.
+        """
+        return not bool(ReConst.OP_BRACKET.search(in_))
+
+    @staticmethod
     def parse_add(tokens: list[Token], i: int) -> tuple[float, int]:
         """
         add := mull (('+'|'-') mull)*
@@ -174,6 +182,8 @@ class Calc:
             return v, i
 
         if tokens[i][0] == "NUM":
+            # cast я добавил сюда чтобы явно указать что я уверен в том, что в v гарантированно попадает float
+            # несмотря на статические анализаторы
             v = cast(float, tokens[i][1])
             i += 1
             return (v, i)
@@ -190,6 +200,9 @@ class Calc:
         """
         if not Calc.validate_expr(in_):
             raise CalcError("В выражении присутвуют недопустимые символы")
+
+        if not Calc.validate_op_bracket(in_):
+            raise CalcError("Ошибка: присутсвует одиночный оператор в скобках")
 
         expr = Calc.parse(in_)
         tokens = Calc.tokenize(expr)
